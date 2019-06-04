@@ -22,10 +22,11 @@ SIGNS = ["ERROR",
 
 # Clean all previous file
 def clean_images():
-	file_list = os.listdir('./')
-	for file_name in file_list:
-		if '.png' in file_name:
-			os.remove(file_name)
+    if os.path.exists('./found'):
+        file_list = os.listdir('./found')
+        for file_name in file_list:
+            if '.png' in file_name:
+                os.remove(file_name)
 
 
 ### Preprocess image
@@ -178,7 +179,9 @@ def localization(image, min_size_components, similitary_contour_with_circle, mod
         sign_type = getLabel(model, sign)
         sign_type = sign_type if sign_type <= 8 else 8
         text = SIGNS[sign_type]
-        cv2.imwrite(str(count)+'_'+text+'.png', sign)
+        if not os.path.exists("./found"):
+            os.mkdir("./found")
+        cv2.imwrite("./found/"+str(count)+'_'+text+'.png', sign)
 
     if sign_type > 0 and sign_type != current_sign_type:        
         cv2.rectangle(original_image, coordinate[0],coordinate[1], (0, 255, 0), 1)
